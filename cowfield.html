@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <title>Moovelous Virtual Cow Field</title>
+        <script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
+        <script type="text/processing" data-processing-target="mycanvas">       
+           
+            var cowList; // new list of cows!
+            var catX = 100; // cat x coordinate
+            var catY = 100; // cat y coordinate
+            var numCows = round(random(1, 7)); //choosing random number of cows to draw
+
+            void setup() // setup function
+            {
+                background (90, 235, 68);
+                noStroke();
+                size(400,400);
+                var f = createFont("DIN Condensed");
+                textFont(f, 60); 
+                
+                cowList = []; 
+                for (var i = 0; i < numCows; i++) { // running this numCows times
+                    var cow = new Cow (round(random(20,250)), round(random(20,250)), round(random(0,1)));
+                    
+                    cowList.push(cow); // add a new cow to our list
+                }
+            }
+
+            void draw() { // draw loop
+                
+                background (122, 224, 62);
+                
+                fill(255, 255, 255);
+                text("Virtual Cow Field", 40, 60);
+                text (numCows, 50, 110);
+                //text(cowList, 50, 100);
+                
+                for (var i = 0; i < cowList.length; i++) { // for every cow in our list... 
+                    cowList[i].draw_cow();
+
+                    //draw_cow(cowList[i].x, cowList[i].y, cowList[i].direction); //draw the #i cow using data from cowList
+                    //tells cow when to turn around to at the right edge
+                    if (cowList[i].x > 350) {
+                        cowList[i].direction = 1;
+                    }
+                    //tells cow when to turn around to at the left edge
+                    if (cowList[i].x < 20) {
+                        cowList[i].direction= 0;
+                    }
+                    
+                    //tells cow to move either direction in 1 pixel incriments 
+                    if (cowList[i].direction === 0) {
+                        cowList[i].x += 1; 
+                    }
+                    if (cowList[i].direction === 1) {
+                        cowList[i].x -= 1; 
+                    }
+                }
+
+                noStroke ();
+                fill(255, 145, 0);
+                //body
+                rect (catX, catY+100, 60,35);
+                
+                //head
+                rect (catX+50, catY+80, 30,30);
+
+                
+                //legs
+                stroke(255, 145, 0);
+                strokeWeight (10);
+                line(catX+50,catY+135,catX+40,catY+150);
+                line(catX+10,catY+135,catX,catY+150);
+                line(catX+55,catY+135,catX+65,catY+150);
+                line(catX+15,catY+135,catX+25,catY+150);
+                
+                catX++;
+                catY++;
+                
+                if (catX > 1000 && catY > 1000) {
+
+                    catX = -100;
+                    catY = -100;
+
+                }
+            };
+
+            class Cow {
+                var x;
+                var y;
+                var direction;
+
+                Cow(xPosition, yPosition, dir) {
+                    x = xPosition;  
+                    y = yPosition;
+                    direction = dir;
+                }
+
+                void draw_cow() { // creating a new draw_cow function
+                    noStroke();
+                    fill(255, 255, 255);
+                    //body
+                    rect (x, y+100, 60,35);
+                    
+                    //head switching directions
+                    if (direction === 0) {
+                        rect (x+50, y+80, 30,30);
+                    }
+                    
+                    if (direction === 1) {
+                        rect (x-20, y+80, 30,30);
+                    }
+                    
+                    //legs
+                    stroke(255, 255, 255);
+                    strokeWeight (10);
+                    line(x+50,y+135,x+40,y+150);
+                    line(x+10,y+135,x,y+150);
+                    line(x+55,y+135,x+65,y+150);
+                    line(x+15,y+135,x+25,y+150);
+                    
+                    noStroke ();
+                    fill(0, 0, 0);
+                    //left spot
+                    rect (x, y+100, 20, 15);
+                    //right spot
+                    rect (x+40, y+120, 20, 15);
+                }
+
+            }
+        </script> 
+    </head>  
+    <body>
+        <canvas id="mycanvas"></canvas>
+    </body>
+</html>
+
