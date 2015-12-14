@@ -132,7 +132,8 @@
                                 state = 7;
                             }
                             //if smaller blob collides with you, you get larger
-                            if (bloblist[i].diameter < p.diameter) {
+
+                            else if (bloblist[i].diameter < p.diameter) {
                                 console.log("Ate blob");
                                 p.diameter = p.diameter + (bloblist[i].diameter/20);
                                 bloblist[i].restart();
@@ -290,7 +291,7 @@
                 	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
                 	if (keyPressed === true && keyCode === DOWN && y < 500) {
                 		y += speed;
-                    }
+                	}
                 }
 
         	} // end of Player_Blob class
