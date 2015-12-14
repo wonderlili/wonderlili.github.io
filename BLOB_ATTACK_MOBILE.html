@@ -290,11 +290,11 @@
                 	// move this blob!
 
                     //TODO if top half up, if bottom half down
-                	if (mouseIsPressed === true && y > 0 && mouseY < H/2) {
+                	if (mouseReleased === true && y > 0 && mouseY < H/2) {
                 		y -= speed;
                 	} 
                 	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
-                	if (mouseIsPressed === true && y < 500 && mouseY > H/2) {
+                	if (mouseReleased === true && y < 500 && mouseY > H/2) {
                 		y += speed;
                 	}
                 }
