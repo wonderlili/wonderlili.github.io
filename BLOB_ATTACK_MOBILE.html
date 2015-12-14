@@ -8,14 +8,16 @@
         	var bloblist;
             var state;
             var highscore = 0;
+            var W = 250;
+            var H = 300;
 
         	void setup () {
         		// setup function
 
                 //sets up size, background, state, and creates new player
-        		size (600, 500);
+        		size (W, H);
         		background (212, 212, 212);
-        		p = new Player(200, 250, 25);
+        		p = new Player(W*0.6, 250, 25);
         		
                 state = 1;
 
@@ -41,7 +43,8 @@
                     fill(250, 250, 250);
                     text("BLOBi", 20, 120);
                     textFont(f, 45);
-                    text("[Press SHIFT to START]", 20, 480);
+                    //TODO make ellipse button
+
                 }
 
                 else if (state === 2) {
@@ -53,7 +56,7 @@
                     text("You are BLOBi, a little blob trying", 20, 240);
                     text("to survive in this big world.", 20, 300);
                     textFont(f, 45);
-                    text("[Press SHIFT for NEXT]", 20, 480);
+                    //TODO make ellipse button
                 }
 
                 else if (state === 3) {
@@ -63,7 +66,7 @@
                     text("You need to avoid larger blobs", 20, 110);
                     text("or else, they will EAT YOU!", 20, 170);
                     textFont(f, 45);
-                    text("[Press SHIFT for NEXT]", 20, 480);
+                    //TODO make ellipse button
                     
                     //DRAWING 
                     noStroke(); 
@@ -85,7 +88,7 @@
                     text("to increase your size and become", 20, 170);
                     text("RULER OF THE WORLD (of blobs)!", 20, 230);
                     textFont(f, 45);
-                    text("[Press SHIFT for NEXT]", 20, 480);
+                    //TODO make ellipse button
                     //DRAWING
                     noStroke(); 
                     fill(0,184,74); 
@@ -106,7 +109,7 @@
                     text("the up and down arrows...", 20, 170);
                     text("GOOD LUCK!!!", 20, 280);
                     textFont(f, 45);
-                    text("[Press SHIFT to PLAY]", 20, 480);
+                    //TODO make ellipse button
                 }
 
                 // STATE 6: PLAY
@@ -187,28 +190,30 @@
 
             //Detects when key is released, changes state when key is released. 
             //If we used keyPressed, slides would skip b/c key still slightly held down after switch
-            void keyReleased() {
-                if (state === 1 && keyCode === SHIFT) {
+            void mouseReleased() {
+
+                // TODO add mouseX and mouseY to each conditional 
+                if (state === 1) {
                     console.log("move on to state 3");
                     state = 2;
                 }
-                else if (state === 2 && keyCode === SHIFT) {
+                else if (state === 2) {
                     console.log("move on to state 3");
                     state = 3;
                 }
-                else if (state === 3 && keyCode === SHIFT) {
+                else if (state === 3) {
                     console.log("move on to state 4");
                     state = 4;
                 }
-                else if (state === 4 && keyCode === SHIFT) {
+                else if (state === 4) {
                     console.log("move on to state 5");
                     state = 5;
                 }
-                else if (state === 5 && keyCode === SHIFT) {
+                else if (state === 5) {
                     console.log("move on to state 6");
                     state = 6;
                 }
-                else if (state === 7 && keyCode === SHIFT) {
+                else if (state === 7) {
                     console.log("restart game");
                     state = 6;
                     //reset location of the blobs and player
@@ -283,12 +288,13 @@
 
                 void move() {
                 	// move this blob!
-                	//assesses whether the "UP" key is pressed and if so, it will move our player UP
-                	if (keyPressed === true && keyCode === UP && y > 0) {
+
+                    //TODO if top half up, if bottom half down
+                	if (mouseIsPressed === true && y > 0) {
                 		y -= speed;
                 	} 
                 	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
-                	if (keyPressed === true && keyCode === DOWN && y < 500) {
+                	if (mouseIsPressed === true && y < 500) {
                 		y += speed;
                 	}
                 }
