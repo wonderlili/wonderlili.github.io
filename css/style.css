@@ -1,5 +1,8 @@
 .btn {
 
 	padding: 7px 14px;
+}
 
+.col-lg-4 {
+    width: inherit;
 }
