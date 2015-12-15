@@ -17,7 +17,7 @@
                 //sets up size, background, state, and creates new player
         		size (W, H);
         		background (212, 212, 212);
-        		p = new Player(200, 250, 25, 10);
+        		p = new Player(200, 250, 25);
         		
                 state = 1;
 
@@ -190,6 +190,20 @@
 
             //Detects when key is released, changes state when key is released. 
             //If we used keyPressed, slides would skip b/c key still slightly held down after switch
+            void mousePressed(){
+
+                if (state === 6) {
+
+                    if(mouseY < 300){
+                        p.y -= 7;
+                    }
+                    if(mouseY > 300){
+                        p.y += 7;
+                    }
+
+                }
+
+            }
             void mouseReleased() {
 
                 
@@ -213,18 +227,6 @@
                     console.log("move on to state 6");
                     state = 6;
                 }
-                else if (state === 6) {
-
-                    if (mouseY < 300){
-
-                        p.y -= p.speed
-                    }
-                    if (mouseY > 300) {
-
-                        p.y += p.speed
-
-                    }
-
                 }
                 else if (state === 7) {
                     console.log("restart game");
@@ -280,11 +282,11 @@
         		var g;
         		var b;
 
-        		Player (xPosition, yPosition, diam, speed) {
+        		Player (xPosition, yPosition, diam) {
                     x = xPosition;  
                     y = yPosition;
                   	diameter = diam;
-                  	speed = speed; 
+                  	speed = 7; 
                   	r = 0;
                   	g = 184;
                   	b = 74; 
@@ -299,18 +301,18 @@
 
                 }
 
-                // void move() {
-                // 	// move this blob!
+                void move() {
+                	// move this blob!
 
-                //     //TODO if top half up, if bottom half down
-                // 	if (mouseClicked === true && y > 0 && pmouseY < 300) {
-                // 		y -= speed;
-                // 	} 
-                // 	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
-                // 	if (mouseClicked === true && y < 500 && pmouseY > 300) {
-                // 		y += speed;
-                // 	}
-                // }
+                    //TODO if top half up, if bottom half down
+                	if (mouseClicked === true && y > 0 && pmouseY < 300) {
+                		y -= speed;
+                	} 
+                	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
+                	if (mouseClicked === true && y < 500 && pmouseY > 300) {
+                		y += speed;
+                	}
+                }
 
         	} // end of Player_Blob class
 
