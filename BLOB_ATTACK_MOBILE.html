@@ -10,6 +10,8 @@
             var highscore = 0;
 
         	void setup () {
+
+                
         		size (600, 500);
         		background (212, 212, 212);
         		p = new Player(200, 250, 25);
@@ -296,18 +298,18 @@
 
                 }
 
-                void move() {
-                	// move this blob!
+                // void move() {
+                // 	// move this blob!
 
-                    //TODO if top half up, if bottom half down
-                	if (mouseClicked === true && y > 0 && pmouseY < 300) {
-                		y -= speed;
-                	} 
-                	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
-                	if (mouseClicked === true && y < 500 && pmouseY > 300) {
-                		y += speed;
-                	}
-                }
+                //     //TODO if top half up, if bottom half down
+                // 	if (mouseClicked === true && y > 0 && pmouseY < 300) {
+                // 		y -= speed;
+                // 	} 
+                // 	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
+                // 	if (mouseClicked === true && y < 500 && pmouseY > 300) {
+                // 		y += speed;
+                // 	}
+                // }
 
         	} // end of Player_Blob class
 
