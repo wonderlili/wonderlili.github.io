@@ -5,31 +5,27 @@
         <script type="text/processing" data-processing-target="mycanvas"> 
 
         	var p; 
-        	var bloblist;
+            var bloblist;
             var state;
             var highscore = 0;
-            var W = 600;
-            var H = 500;
 
-        	void setup () {
-        		// setup function
-
-                //sets up size, background, state, and creates new player
-        		size (W, H);
-        		background (212, 212, 212);
-        		p = new Player(200, 250, 25);
-        		
+            void setup () {
+                //setup function, creates new blobs and player
+                size (600, 500);
+                background (212, 212, 212);
+                p = new Player(200, 250, 25);
+                
                 state = 1;
 
                 //adds 6 NEW blobs to bloblist with x, y, and diameter values
-        		bloblist = [];
+                bloblist = [];
                 var bb;
                 for (var i = 0; i < 6; i++) {
                     bb = new Blob(700, random(50, 450), random(10, 200));
                     bloblist.push(bb);
                 }
 
-        	}
+            }
 
         	void draw () {
                 // draw loop
@@ -190,7 +186,7 @@
 
             //Detects when key is released, changes state when key is released. 
             //If we used keyPressed, slides would skip b/c key still slightly held down after switch
-            
+
             void mouseReleased() {
 
                 
@@ -292,13 +288,13 @@
                 	// move this blob!
 
                     //TODO if top half up, if bottom half down
-                	if (mouseClicked === true && y > 0 && pmouseY < 300) {
+                	if (mouseClicked === true && y > 0) {
                 		y -= speed;
                 	} 
                 	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
-                	if (mouseClicked === true && y < 500 && pmouseY > 300) {
-                		y += speed;
-                	}
+                	// if (mouseClicked === true && y < 500 && pmouseY > 300) {
+                	// 	y += speed;
+                	// }
                 }
 
         	} // end of Player_Blob class
