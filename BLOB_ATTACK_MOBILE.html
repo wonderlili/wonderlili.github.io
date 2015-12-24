@@ -233,10 +233,10 @@
 
             void mousePressed() {
                 if (state === 6) {
-                    if (mouseY < 300) {
+                    if (mouseY < 300 && p.y > 0) {
                         p.y -= p.speed;
                     }
-                    else if (mouseY > 300) {
+                    else if (mouseY > 300 && p.y < 500) {
                         p.y += p.speed;
                     }
                 }
