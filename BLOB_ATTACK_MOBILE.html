@@ -4,13 +4,15 @@
         <script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
         <script type="text/processing" data-processing-target="mycanvas"> 
 
-        	var p; 
+            var p; 
             var bloblist;
             var state;
             var highscore = 0;
 
             void setup () {
-                //setup function, creates new blobs and player
+                // setup function
+
+                //sets up size, background, state, and creates new player
                 size (600, 500);
                 background (212, 212, 212);
                 p = new Player(200, 250, 25);
@@ -27,9 +29,8 @@
 
             }
 
-        	void draw () {
-                // draw loop
-        		background(212, 212, 212);
+            void draw () {
+                background(212, 212, 212);
                 
                 //States 1-5 === intro sequence/how to play. Skip by SHIFT
                 if (state === 1) {
@@ -118,7 +119,7 @@
 
                     // draw and move our player
                     p.draw_player();
-                    p.move();
+                   
 
                     // draw and move our blobs
                     for (var i = 0; i < bloblist.length; i++) {
@@ -181,15 +182,11 @@
                     text("One BLOBi", 20, 200);
                     text("to rule them all!", 20, 280);
                 }
-        		
-        	}
+            }
 
             //Detects when key is released, changes state when key is released. 
             //If we used keyPressed, slides would skip b/c key still slightly held down after switch
-
             void mouseReleased() {
-
-                
                 if (state === 1) {
                     console.log("move on to state 3");
                     state = 2;
@@ -210,7 +207,6 @@
                     console.log("move on to state 6");
                     state = 6;
                 }
-                }
                 else if (state === 7) {
                     console.log("restart game");
                     state = 6;
@@ -224,11 +220,27 @@
                     bloblist[3].restart();
                     bloblist[4].restart();
                     bloblist[5].restart();
-
-
                 }
+                // else if (state === 6) {
+                //     if (mouseY < 300) {
+                //         p.y -= p.speed;
+                //     }
+                //     else if (mouseY > 300) {
+                //         p.y += p.speed;
+                //     }
+                // }
             }
 
+            void mousePressed() {
+                if (state === 6) {
+                    if (mouseY < 300) {
+                        p.y -= p.speed;
+                    }
+                    else if (mouseY > 300) {
+                        p.y += p.speed;
+                    }
+                }
+            }
 
 
             // function to determine if blob and player are touching
@@ -254,83 +266,82 @@
                 }
             }
 
-        	class Player { 
+            class Player { 
                 //player class: assigning values to BLOBi (player blob)
 
-        		var x;
-        		var y;
-        		var diameter;
-        		var speed;
-        		var r;
-        		var g;
-        		var b;
+                var x;
+                var y;
+                var diameter;
+                var speed;
+                var r;
+                var g;
+                var b;
 
-        		Player (xPosition, yPosition, diam) {
+                Player (xPosition, yPosition, diam) {
                     x = xPosition;  
                     y = yPosition;
-                  	diameter = diam;
-                  	speed = 7; 
-                  	r = 0;
-                  	g = 184;
-                  	b = 74; 
+                    diameter = diam;
+                    speed = 7; 
+                    r = 0;
+                    g = 184;
+                    b = 74; 
 
                 }
 
                 void draw_player() {
-                	// draw this player
-                	noStroke();
-                	fill(r, g, b);
-                	ellipse(x, y, diameter, diameter);
+                    // draw this player
+                    noStroke();
+                    fill(r, g, b);
+                    ellipse(x, y, diameter, diameter);
 
                 }
 
                 void move() {
-                	// move this blob!
-
-                    //TODO if top half up, if bottom half down
-                	if (mouseClicked === true && y > 0) {
-                		y -= speed;
-                	} 
-                	//assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
-                	// if (mouseClicked === true && y < 500 && pmouseY > 300) {
-                	// 	y += speed;
-                	// }
+                    // move this blob!
+                    // //assesses whether the "UP" key is pressed and if so, it will move our player UP
+                    if (mouseIsPressed === true && p.y > 0) {
+                        y -= speed;
+                    } 
+                    // //assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
+                    if (mouseIsPressed === false && p.y < 500) {
+                        y += speed;
+                    }
                 }
 
-        	} // end of Player_Blob class
+            } // end of Player_Blob class
 
-        	class Blob { 
+            class Blob { 
             // assigns values to all non-player blobs
-        		var x;
-        		var y;
-        		var diameter;
-        		var speed;
-        		var r;
-        		var g;
-        		var b;
+                var x;
+                var y;
+                var diameter;
+                var speed;
+                var r;
+                var g;
+                var b;
 
-        		Blob (xPosition, yPosition, diam) {
+                Blob (xPosition, yPosition, diam) {
                     x = xPosition;  
                     y = yPosition;
-                  	diameter = diam;
-                  	speed = random(1,5); 
-                  	r = 59;
-                  	g = 59;
-                  	b = 59; 
+                    diameter = diam;
+                    speed = random(1,5); 
+                    r = 59;
+                    g = 59;
+                    b = 59; 
 
                 }
 
                 void draw_blob() {
-                	// draw this blob
-                	noStroke();
-                	fill(r, g, b);
-                	ellipse(x, y, diameter, diameter);
+                    // draw this blob
+                    noStroke();
+                    fill(r, g, b);
+                    ellipse(x, y, diameter, diameter);
                 }
 
                 void move() {
-                	// move this blob!
-                	//decreases x by SPEED
-                	x -= speed;
+                    // move this blob!
+                    //decreases x by SPEED
+                    x -= speed;
                     //when a blob goes offscreen, blob will reset and go back to start, as well as resetting size and y coordinate
                     if (x < -100) {
                         restart();
@@ -345,7 +356,7 @@
                     speed = random(1,5);
                 }
 
-        	} // end of Blob class
+            } // end of Blob class
 
          </script> 
     </head>  
