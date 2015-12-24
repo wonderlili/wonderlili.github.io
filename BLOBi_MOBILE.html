@@ -1,0 +1,367 @@
+<html>
+    <head>
+        <title>BLOB ATTACK</title>
+        <script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
+        <script type="text/processing" data-processing-target="mycanvas"> 
+
+            var p; 
+            var bloblist;
+            var state;
+            var highscore = 0;
+
+            void setup () {
+                // setup function
+
+                //sets up size, background, state, and creates new player
+                size (600, 500);
+                background (212, 212, 212);
+                p = new Player(200, 250, 25);
+                
+                state = 1;
+
+                //adds 6 NEW blobs to bloblist with x, y, and diameter values
+                bloblist = [];
+                var bb;
+                for (var i = 0; i < 6; i++) {
+                    bb = new Blob(700, random(50, 450), random(10, 200));
+                    bloblist.push(bb);
+                }
+
+            }
+
+            void draw () {
+                background(212, 212, 212);
+                
+                //States 1-5 === intro sequence/how to play. Skip by SHIFT
+                if (state === 1) {
+
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 120);
+                    fill(250, 250, 250);
+                    text("BLOBi", 20, 120);
+                    textFont(f, 45);
+                    text("[PRESS for NEXT]", 20, 480);
+
+                }
+
+                else if (state === 2) {
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 70);
+                    fill(250, 250, 250);
+                    text("Welcome to BLOBi", 20, 110);
+                    textFont(f, 50);
+                    text("You are BLOBi, a little blob trying", 20, 240);
+                    text("to survive in this big world.", 20, 300);
+                    textFont(f, 45);
+                    text("[PRESS for NEXT]", 20, 480);
+                }
+
+                else if (state === 3) {
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 50);
+                    fill(250, 250, 250);
+                    text("You need to avoid larger blobs", 20, 110);
+                    text("or else, they will EAT YOU!", 20, 170);
+                    textFont(f, 45);
+                    text("[PRESS for NEXT]", 20, 480);
+                    
+                    //DRAWING 
+                    noStroke(); 
+                    fill(0,184,74); 
+                    ellipse(100, 300, 50, 50);
+                    fill(0, 0, 0);
+                    rect(160, 298, 60, 5);
+                    triangle(250, 300, 220, 320, 220, 280);
+                    fill(59,59,59);
+                    ellipse(350, 300, 90, 90);
+
+                }
+
+                else if (state === 4) {
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 50);
+                    fill(250, 250, 250);
+                    text("And you will EAT smaller blobs", 20, 110);
+                    text("to increase your size and become", 20, 170);
+                    text("RULER OF THE WORLD (of blobs)!", 20, 230);
+                    textFont(f, 45);
+                    text("[PRESS for NEXT]", 20, 480);
+                    //DRAWING
+                    noStroke(); 
+                    fill(0,184,74); 
+                    ellipse(100, 300, 50, 50);
+                    fill(0, 0, 0);
+                    rect(160, 298, 60, 5);
+                    triangle(250, 300, 220, 320, 220, 280);
+                    fill(59,59,59);
+                    ellipse(300, 300, 30, 30);
+
+                }
+
+                else if (state === 5) {
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 50);
+                    fill(250, 250, 250);
+                    text("You can move BLOBi by clicking on", 20, 110);
+                    text("the top or bottom half of the screen", 20, 170);
+                    text("GOOD LUCK!!!", 20, 280);
+                    textFont(f, 45);
+                    text("[PRESS to PLAY]", 20, 480);
+                }
+
+                // STATE 6: PLAY
+                else if (state === 6) {
+                    // WIN 
+                    if (p.diameter > 240) {
+                        console.log("YOU WIN!");
+                        state = 8;
+                    }
+
+                    // draw and move our player
+                    p.draw_player();
+                   
+
+                    // draw and move our blobs
+                    for (var i = 0; i < bloblist.length; i++) {
+                        if (collide(bloblist[i], p)) {
+                            console.log("hit");
+
+                            //if bigger blob collides with you, game over
+                            if (bloblist[i].diameter > p.diameter) {
+                                console.log("GAME OVER");
+                                state = 7;
+                            }
+                            //if smaller blob collides with you, you get larger
+                            else if (bloblist[i].diameter < p.diameter) {
+                                console.log("Ate blob");
+                                p.diameter = p.diameter + (bloblist[i].diameter/20);
+                                bloblist[i].restart();
+                            }
+                        }
+
+                        //drawing and moving our blobs
+                        bloblist[i].draw_blob();
+                        bloblist[i].move();
+                        
+                        // display score
+                        var f = createFont("DIN Condensed");
+                        textFont(f, 80);
+                        fill(250, 250, 250);
+                        text(round(p.diameter - 25), 30, 90);
+                    }
+
+                    //looks to see whether the players current size is larger than the previous highscore, and if it is true, it will replace high score with the player current size
+                    if ((p.diameter - 25) > highscore) {
+
+                        highscore = (p.diameter - 25); //not rounding
+
+                    }
+                } 
+
+                // STATE 7: GAME OVER
+                else if (state === 7) {
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 70);
+                    fill(250, 250, 250);
+                    text("GAME OVER :(", 20, 110);
+                    text("Score:", 20, 180)
+                    text(round(p.diameter - 25), 160, 180);
+                    //displays highscore
+                    text("Best:", 20, 250);
+                    text(round(highscore), 130, 250); //rounding here instead
+                    //restart text
+                    textFont(f, 45);
+                    text("[Press to PLAY AGAIN]", 20, 480);
+                }
+
+                // STATE 8: YOU WON
+                else if (state === 8) {
+                    var f = createFont("DIN Condensed");
+                    textFont(f, 80);
+                    fill(250, 250, 250);
+                    text("One BLOBi", 20, 200);
+                    text("to rule them all!", 20, 280);
+                }
+            }
+
+            //Detects when key is released, changes state when key is released. 
+            //If we used keyPressed, slides would skip b/c key still slightly held down after switch
+            void mouseReleased() {
+                if (state === 1) {
+                    console.log("move on to state 3");
+                    state = 2;
+                }
+                else if (state === 2) {
+                    console.log("move on to state 3");
+                    state = 3;
+                }
+                else if (state === 3) {
+                    console.log("move on to state 4");
+                    state = 4;
+                }
+                else if (state === 4) {
+                    console.log("move on to state 5");
+                    state = 5;
+                }
+                else if (state === 5) {
+                    console.log("move on to state 6");
+                    state = 6;
+                }
+                else if (state === 7) {
+                    console.log("restart game");
+                    state = 6;
+                    //reset location of the blobs and player
+                    p.x = 200;
+                    p.y = 250;
+                    p.diameter = 25;
+                    bloblist[0].restart();
+                    bloblist[1].restart();
+                    bloblist[2].restart();
+                    bloblist[3].restart();
+                    bloblist[4].restart();
+                    bloblist[5].restart();
+                }
+                // else if (state === 6) {
+                //     if (mouseY < 300) {
+                //         p.y -= p.speed;
+                //     }
+                //     else if (mouseY > 300) {
+                //         p.y += p.speed;
+                //     }
+                // }
+            }
+
+            void mousePressed() {
+                if (state === 6) {
+                    if (mouseY < 300) {
+                        p.y -= p.speed;
+                    }
+                    else if (mouseY > 300) {
+                        p.y += p.speed;
+                    }
+                }
+            }
+
+
+            // function to determine if blob and player are touching
+            boolean collide (blob, player) {
+
+                //creates a variable that measures the combined length of blob radii
+                var blobs_radii = blob.diameter/2 + player.diameter/2;
+                //distance between both x
+                var x_distance = blob.x - player.x;
+                //distance between both y
+                var y_distance = blob.y - player.y;
+                // sqrt(a*a + b*b) = c, distance between both blobs 
+                var center_distance = (x_distance*x_distance) + (y_distance*y_distance);
+                center_distance = sqrt(center_distance);
+
+                //tests whether the radii length is long enough to breach the gap between the two center points of the blobs
+                if (blobs_radii > center_distance) {
+                    // console.log("You are touching a blob");
+                    return true; 
+                }
+                else {
+                    return false;
+                }
+            }
+
+            class Player { 
+                //player class: assigning values to BLOBi (player blob)
+
+                var x;
+                var y;
+                var diameter;
+                var speed;
+                var r;
+                var g;
+                var b;
+
+                Player (xPosition, yPosition, diam) {
+                    x = xPosition;  
+                    y = yPosition;
+                    diameter = diam;
+                    speed = 7; 
+                    r = 0;
+                    g = 184;
+                    b = 74; 
+
+                }
+
+                void draw_player() {
+                    // draw this player
+                    noStroke();
+                    fill(r, g, b);
+                    ellipse(x, y, diameter, diameter);
+
+                }
+
+                void move() {
+                    // move this blob!
+                    // //assesses whether the "UP" key is pressed and if so, it will move our player UP
+                    if (mouseIsPressed === true && p.y > 0) {
+                        y -= speed;
+                    } 
+                    // //assesses whether the "DOWN" key is pressed and if so, it will move our player DOWN
+                    if (mouseIsPressed === false && p.y < 500) {
+                        y += speed;
+                    }
+                }
+
+            } // end of Player_Blob class
+
+            class Blob { 
+            // assigns values to all non-player blobs
+                var x;
+                var y;
+                var diameter;
+                var speed;
+                var r;
+                var g;
+                var b;
+
+                Blob (xPosition, yPosition, diam) {
+                    x = xPosition;  
+                    y = yPosition;
+                    diameter = diam;
+                    speed = random(1,5); 
+                    r = 59;
+                    g = 59;
+                    b = 59; 
+
+                }
+
+                void draw_blob() {
+                    // draw this blob
+                    noStroke();
+                    fill(r, g, b);
+                    ellipse(x, y, diameter, diameter);
+                }
+
+                void move() {
+                    // move this blob!
+                    //decreases x by SPEED
+                    x -= speed;
+                    //when a blob goes offscreen, blob will reset and go back to start, as well as resetting size and y coordinate
+                    if (x < -100) {
+                        restart();
+                    }
+                }
+
+                //reset blob position at time of "replay" or when they go off the screen
+                void restart() {
+                    x = 700;
+                    y = random(50, 450);
+                    diameter = random(10,200);
+                    speed = random(1,5);
+                }
+
+            } // end of Blob class
+
+         </script> 
+    </head>  
+    <body>
+        <canvas id="mycanvas"></canvas>
+    </body>
+</html>
+
